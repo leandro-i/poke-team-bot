@@ -5,7 +5,7 @@ from matplotlib.colors import is_color_like
 import sqlite3
 import os
 
-PORT = int(os.environ.get('PORT', 5000))
+PORT = int(os.environ.get('PORT', '8443'))
 BOT_TOKEN = os.environ['BOT_TOKEN']
 
 
@@ -331,6 +331,7 @@ if __name__ == '__main__':
     dispatcher.add_handler(color_handler)
     
     updater.start_webhook(listen="0.0.0.0",
-                            port=int(PORT),
+                            port=PORT,
                             url_path=BOT_TOKEN)
     updater.bot.setWebhook('https://poke-team-bot.herokuapp.com/' + BOT_TOKEN)
+    updater.idle()
