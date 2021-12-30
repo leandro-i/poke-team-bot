@@ -332,6 +332,7 @@ if __name__ == '__main__':
     
     updater.start_webhook(listen="0.0.0.0",
                             port=PORT,
-                            url_path=BOT_TOKEN)
-    updater.bot.setWebhook('https://poke-team-bot.herokuapp.com/' + BOT_TOKEN)
+                            url_path=BOT_TOKEN,
+                            webhook_url='https://poke-team-bot.herokuapp.com/' + BOT_TOKEN)
+    # updater.bot.setWebhook('https://poke-team-bot.herokuapp.com/' + BOT_TOKEN)
     updater.idle()
