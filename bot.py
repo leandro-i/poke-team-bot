@@ -1,13 +1,23 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import logging
 import requests
 from html2image import Html2Image
 from matplotlib.colors import is_color_like
 import sqlite3
 import os
 
+# Enable logging
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+
 PORT = int(os.environ.get('PORT', '8443'))
 BOT_TOKEN = os.environ['BOT_TOKEN']
 
+def error(update, context):
+    """Log Errors caused by Updates."""
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 def create_user_db(user_id, username, full_name):
     if not username:
