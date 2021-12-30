@@ -333,6 +333,7 @@ if __name__ == '__main__':
     
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(warning_handler)
+    dispatcher.add_error_handler(error)
     dispatcher.add_handler(name_handler)
     dispatcher.add_handler(add_handler)
     dispatcher.add_handler(delete_handler)
