@@ -6,7 +6,7 @@ import sqlite3
 import os
 
 PORT = int(os.environ.get('PORT', 5000))
-BOT_TOKEN = os.environ['TOKEN']
+BOT_TOKEN = os.environ['BOT_TOKEN']
 
 
 def create_user_db(user_id, username, full_name):
