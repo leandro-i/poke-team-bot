@@ -91,11 +91,12 @@ def generate_path():
     img_list = []
     num_list = []
     
-    for file in path_list:
-        if 'poketeam' in file and file.endswith('.png'):
-            img_list.append(file)
-            num = int(''.join(filter(lambda x: x.isdigit(), file)))
-            num_list.append(num)
+    if path_list:
+        for file in path_list:
+            if 'poketeam' in file and file.endswith('.png'):
+                img_list.append(file)
+                num = int(''.join(filter(lambda x: x.isdigit(), file)))
+                num_list.append(num)
             
     if not img_list:
         return ('./img/', 'poketeam_1.png')
