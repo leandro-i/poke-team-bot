@@ -91,19 +91,21 @@ def generate_path():
     img_list = []
     num_list = []
     
-    if path_list:
+    try:
         for file in path_list:
             if 'poketeam' in file and file.endswith('.png'):
                 img_list.append(file)
                 num = int(''.join(filter(lambda x: x.isdigit(), file)))
                 num_list.append(num)
+    except NameError:
+        pass
             
     if not img_list:
-        return ('./img/', 'poketeam_1.png')
+        return ('/img/', 'poketeam_1.png')
     elif len(img_list) > 10:
-        os.remove(f'./img/poketeam_{min(num_list)}.png')
+        os.remove(f'/img/poketeam_{min(num_list)}.png')
     
-    return ('./img/', f'poketeam_{max(num_list)+1}.png')
+    return ('/img/', f'poketeam_{max(num_list)+1}.png')
 
 
 # Comandos
