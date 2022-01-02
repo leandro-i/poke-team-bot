@@ -85,9 +85,9 @@ def get_value(user_id, nickname=False, team=False, color=False):
 
 def generate_path():
     try:
-        path_list = os.listdir('./img/')
+        path_list = os.listdir('../tmp/img/')
     except FileNotFoundError:
-        os.mkdir('./img/')
+        os.mkdir('../tmp/img/')
     img_list = []
     num_list = []
     
@@ -101,11 +101,11 @@ def generate_path():
         pass
             
     if not img_list:
-        return ('/img/', 'poketeam_1.png')
+        return ('../tmp/img/', 'poketeam_1.png')
     elif len(img_list) > 10:
-        os.remove(f'/img/poketeam_{min(num_list)}.png')
+        os.remove(f'../tmp/img/poketeam_{min(num_list)}.png')
     
-    return ('/img/', f'poketeam_{max(num_list)+1}.png')
+    return ('../tmp/img/', f'poketeam_{max(num_list)+1}.png')
 
 
 # Comandos
