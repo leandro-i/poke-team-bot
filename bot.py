@@ -319,7 +319,7 @@ def create(update, context):
         
         hti = Html2Image(output_path=img_path[0]) # , custom_flags=['--no-sandbox', '--headless']
         hti.browser.flags += ('--no-sandbox', '--disable-gpu', '--disable-software-rasterizer', '--headless')
-        # hti.browser_executable = '/usr/bin/google-chrome'
+        hti.browser_executable = '/usr/bin/google-chrome'
         hti.screenshot(html_str=html, css_str=css, size=(500, 500), save_as=img_path[1])
         
         context.bot.send_photo(
