@@ -3,8 +3,11 @@ import logging
 import requests
 from html2image import Html2Image
 from matplotlib.colors import is_color_like
-import sqlite3
 import os
+import psycopg2
+
+conn = psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7")
+cursor = conn.cursor()
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -25,63 +28,59 @@ def create_user_db(user_id, username, full_name):
     if not full_name:
         full_name = 'NULL'
         
-    with sqlite3.connect('db.sqlite3') as conn:
-        cursor = conn.cursor()
+    try:
+        cursor.execute('INSERT INTO poketeam (user_id, username, full_name) values (?, ?, ?);', (user_id, username, full_name))
+        conn.commit()
+    except:
+        pass
+
+def update_columns(user_id, nickname=False, team=False, color=False, image=False): 
+    cursor = conn.cursor()
+    if nickname:
         try:
-            cursor.execute('INSERT INTO poketeam (user_id, username, full_name) values (?, ?, ?);', (user_id, username, full_name))
-            conn.commit()
+            cursor.execute('UPDATE poketeam SET nickname = ? WHERE user_id = ?;', (nickname, user_id))
         except:
             pass
-
-def update_columns(user_id, nickname=False, team=False, color=False, image=False):
-    with sqlite3.connect('db.sqlite3') as conn:
-        cursor = conn.cursor()
-        if nickname:
-            try:
-                cursor.execute('UPDATE poketeam SET nickname = ? WHERE user_id = ?;', (nickname, user_id))
-            except:
-                pass
-        if team:
-            try:
-                cursor.execute('UPDATE poketeam SET team = ? WHERE user_id = ?;', (team, user_id))
-            except:
-                pass
-        if color:
-            try:
-                cursor.execute('UPDATE poketeam SET color = ? WHERE user_id = ?;', (color, user_id))
-            except:
-                pass
-        if image:
-            try:
-                cursor.execute('UPDATE poketeam SET image = ? WHERE user_id = ?;', (image, user_id))
-            except:
-                pass
-        conn.commit()
+    if team:
+        try:
+            cursor.execute('UPDATE poketeam SET team = ? WHERE user_id = ?;', (team, user_id))
+        except:
+            pass
+    if color:
+        try:
+            cursor.execute('UPDATE poketeam SET color = ? WHERE user_id = ?;', (color, user_id))
+        except:
+            pass
+    if image:
+        try:
+            cursor.execute('UPDATE poketeam SET image = ? WHERE user_id = ?;', (image, user_id))
+        except:
+            pass
+    conn.commit()
         
 def get_value(user_id, nickname=False, team=False, color=False):
-    with sqlite3.connect('db.sqlite3') as conn:
-        cursor = conn.cursor()
-        if nickname:
-            try:
-                cursor.execute('SELECT nickname FROM poketeam WHERE user_id = ?;', (user_id,))
-                value = cursor.fetchone()[0]
-                return value
-            except:
-                pass
-        if team:
-            try:
-                cursor.execute('SELECT team FROM poketeam WHERE user_id = ?;', (user_id,))
-                value = cursor.fetchone()[0]
-                return value
-            except:
-                pass
-        if color:
-            try:
-                cursor.execute('SELECT color FROM poketeam WHERE user_id = ?;', (user_id,))
-                value = cursor.fetchone()[0]
-                return value
-            except:
-                pass
+    cursor = conn.cursor()
+    if nickname:
+        try:
+            cursor.execute('SELECT nickname FROM poketeam WHERE user_id = ?;', (user_id,))
+            value = cursor.fetchone()[0]
+            return value
+        except:
+            pass
+    if team:
+        try:
+            cursor.execute('SELECT team FROM poketeam WHERE user_id = ?;', (user_id,))
+            value = cursor.fetchone()[0]
+            return value
+        except:
+            pass
+    if color:
+        try:
+            cursor.execute('SELECT color FROM poketeam WHERE user_id = ?;', (user_id,))
+            value = cursor.fetchone()[0]
+            return value
+        except:
+            pass
 
 def generate_path():
     try:
@@ -121,12 +120,15 @@ def start(update, context):
         chat_id=user_id,
         text="""
         Este bot genera una imagen de tu equipo Pokémon.  \n
-        Comandos:  \n
-        - */name* <user-name>: Definir nombre de usuario para la imagen.  \n
-        - */add* <pokemon-name>: Agregar Pokémon al equipo. `/add pikachu` `/add bulbasaur charmander squirtle`  \n
-        - */delete* <pokemon-name>: Quitar Pokémon del equipo. `/delete pikachu`  \n
-        - */color* <color-code>: Definir color de fondo para la imagen. `/color blue` `/color #FF5733`  \n
-        - */create*: Generar imagen.
+Comandos:  \n
+- */name* <user-name>: Definir nombre de usuario para la imagen.  \n
+- */add* <pokemon-name>: Agregar Pokémon al equipo. El máximo es de 6. `/add pikachu` `/add bulbasaur charmander squirtle`  \n
+- */delete* <pokemon-name>: Quitar Pokémon del equipo. `/delete pikachu`  \n
+- */reset*: Borrar equipo.  \n
+- */color* <color-code>: Definir color de fondo para la imagen. `/color blue` `/color #FF5733`  \n
+- */create*: Generar imagen.
+
+Para elegir un Pokémon shiny, agregar un * al final del nombre. `/add mew*`
         """,
         parse_mode='markdown'
     )
@@ -137,7 +139,15 @@ start_handler = CommandHandler('start', start)
 def warning(update, context):
     context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text='Utilice el comando /add para agregar Pokémon a su equipo. El máximo es 6.\n/delete para quitar Pokémon de su equipo.\n/name para agregarle tu nombre a la imagen'
+        text="""Comandos:  \n
+- */name* <user-name>: Definir nombre de usuario para la imagen.  \n
+- */add* <pokemon-name>: Agregar Pokémon al equipo. El máximo es de 6. `/add pikachu` `/add bulbasaur charmander squirtle`  \n
+- */delete* <pokemon-name>: Quitar Pokémon del equipo. `/delete pikachu`  \n
+- */reset*: Borrar equipo.  \n
+- */color* <color-code>: Definir color de fondo para la imagen. `/color blue` `/color #FF5733`  \n
+- */create*: Generar imagen.
+
+Para elegir un Pokémon shiny, agregar un * al final del nombre. `/add mew*`"""
     )
     
 warning_handler = MessageHandler(Filters.text & (~Filters.command), warning)
@@ -191,7 +201,7 @@ def add(update, context):
         if len(team_list) > 5:
             context.bot.send_message(
                 chat_id=user_id,
-                text='El máximo es de 6 Pokémon.'
+                text='El máximo es de 6 Pokémon'
             )
             break
         
@@ -212,7 +222,7 @@ def add(update, context):
         else:
             context.bot.send_message(
                 chat_id=user_id,
-                text=f'{p.capitalize()} no es un Pokémon válido.'
+                text=f'{p.capitalize()} no es un Pokémon válido'
             )
     
     update_columns(user_id, team=' '.join(team_list))
@@ -226,7 +236,7 @@ add_handler = CommandHandler('add', add)
 
 def delete(update, context):
     user_id = update.effective_chat.id
-    del_pokemon = ' '.join(context.args)
+    del_pokemon = ' '.join(context.args).capitalize()
     team = get_value(user_id, team=True)
     
     if team:
@@ -234,30 +244,30 @@ def delete(update, context):
     else:
         team_list = []
     
-    if del_pokemon in team_list:
+    if del_pokemon and del_pokemon in team_list:
         team_list.remove(del_pokemon)
-        update_columns(user_id, team=team_list)
+        update_columns(user_id, team=' '.join(team_list))
     else:
         context.bot.send_message(
             chat_id=user_id,
-            text=f'{del_pokemon.capitalize()} no se encuentra en tu equipo.'
+            text=f'{del_pokemon.capitalize()} no se encuentra en tu equipo'
         )
 delete_handler = CommandHandler('delete', delete)
 
 
 def reset_team(update, context):
     user_id = update.effective_chat.id
-    with sqlite3.connect('db.sqlite3') as conn:
-        cursor = conn.cursor()
-        try:
-            cursor.execute('UPDATE poketeam SET team = NULL WHERE user_id = ?;', (user_id,))
-            conn.commit()
-            context.bot.send_message(
-                chat_id=user_id,
-                text='Se ha reseteado tu equipo Pokémon.'
-            )
-        except:
-            pass
+    
+    cursor = conn.cursor()
+    try:
+        cursor.execute('UPDATE poketeam SET team = NULL WHERE user_id = ?;', (user_id,))
+        conn.commit()
+        context.bot.send_message(
+            chat_id=user_id,
+            text='Se ha eliminado tu equipo Pokémon'
+        )
+    except:
+        pass
 reset_handler = CommandHandler('reset', reset_team)
 
 
@@ -273,7 +283,7 @@ def create(update, context):
     else:
         context.bot.send_message(
             chat_id=user_id,
-            text='No has elegido tu equipo.'
+            text='No has elegido tu equipo'
         )
         return
     
