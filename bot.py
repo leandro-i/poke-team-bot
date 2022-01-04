@@ -129,7 +129,7 @@ Comandos:  \n
 - */color* <color-code>: Definir color de fondo para la imagen. `/color blue` `/color #FF5733`  \n
 - */create*: Generar imagen.
 
-Para elegir un Pokémon shiny, agregar un * al final del nombre. `/add mew*`
+Para elegir un Pokémon shiny, agregar un \* al final del nombre. `/add mew\*`
         """,
         parse_mode='markdown'
     )
