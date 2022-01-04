@@ -27,60 +27,64 @@ def create_user_db(user_id, username, full_name):
         username = 'NULL'
     if not full_name:
         full_name = 'NULL'
-        
-    try:
-        cursor.execute('INSERT INTO poketeam (user_id, username, full_name) values (?, ?, ?);', (user_id, username, full_name))
-        conn.commit()
-    except:
-        pass
+    
+    with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+        cursor = conn.cursor()
+        try:
+            cursor.execute('INSERT INTO poketeam (user_id, username, full_name) values (%s, %s, %s);', (user_id, username, full_name))
+            conn.commit()
+        except:
+            pass
 
 def update_columns(user_id, nickname=False, team=False, color=False, image=False): 
-    cursor = conn.cursor()
-    if nickname:
-        try:
-            cursor.execute('UPDATE poketeam SET nickname = ? WHERE user_id = ?;', (nickname, user_id))
-        except:
-            pass
-    if team:
-        try:
-            cursor.execute('UPDATE poketeam SET team = ? WHERE user_id = ?;', (team, user_id))
-        except:
-            pass
-    if color:
-        try:
-            cursor.execute('UPDATE poketeam SET color = ? WHERE user_id = ?;', (color, user_id))
-        except:
-            pass
-    if image:
-        try:
-            cursor.execute('UPDATE poketeam SET image = ? WHERE user_id = ?;', (image, user_id))
-        except:
-            pass
-    conn.commit()
+    with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+        cursor = conn.cursor()
+        if nickname:
+            try:
+                cursor.execute('UPDATE poketeam SET nickname = %s WHERE user_id = %s;', (nickname, user_id))
+            except:
+                pass
+        if team:
+            try:
+                cursor.execute('UPDATE poketeam SET team = %s WHERE user_id = %s;', (team, user_id))
+            except:
+                pass
+        if color:
+            try:
+                cursor.execute('UPDATE poketeam SET color = %s WHERE user_id = %s;', (color, user_id))
+            except:
+                pass
+        if image:
+            try:
+                cursor.execute('UPDATE poketeam SET image = %s WHERE user_id = %s;', (image, user_id))
+            except:
+                pass
+        conn.commit()
         
 def get_value(user_id, nickname=False, team=False, color=False):
-    cursor = conn.cursor()
-    if nickname:
-        try:
-            cursor.execute('SELECT nickname FROM poketeam WHERE user_id = ?;', (user_id,))
-            value = cursor.fetchone()[0]
-            return value
-        except:
-            pass
-    if team:
-        try:
-            cursor.execute('SELECT team FROM poketeam WHERE user_id = ?;', (user_id,))
-            value = cursor.fetchone()[0]
-            return value
-        except:
-            pass
-    if color:
-        try:
-            cursor.execute('SELECT color FROM poketeam WHERE user_id = ?;', (user_id,))
-            value = cursor.fetchone()[0]
-            return value
-        except:
-            pass
+    with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+        cursor = conn.cursor()
+        if nickname:
+            try:
+                cursor.execute('SELECT nickname FROM poketeam WHERE user_id = %s;', (user_id,))
+                value = cursor.fetchone()[0]
+                return value
+            except:
+                pass
+        if team:
+            try:
+                cursor.execute('SELECT team FROM poketeam WHERE user_id = %s;', (user_id,))
+                value = cursor.fetchone()[0]
+                return value
+            except:
+                pass
+        if color:
+            try:
+                cursor.execute('SELECT color FROM poketeam WHERE user_id = %s;', (user_id,))
+                value = cursor.fetchone()[0]
+                return value
+            except:
+                pass
 
 def generate_path():
     try:
@@ -258,16 +262,17 @@ delete_handler = CommandHandler('delete', delete)
 def reset_team(update, context):
     user_id = update.effective_chat.id
     
-    cursor = conn.cursor()
-    try:
-        cursor.execute('UPDATE poketeam SET team = NULL WHERE user_id = ?;', (user_id,))
-        conn.commit()
-        context.bot.send_message(
-            chat_id=user_id,
-            text='Se ha eliminado tu equipo Pokémon'
-        )
-    except:
-        pass
+    with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+        cursor = conn.cursor()
+        try:
+            cursor.execute('UPDATE poketeam SET team = NULL WHERE user_id = %s;', (user_id,))
+            conn.commit()
+            context.bot.send_message(
+                chat_id=user_id,
+                text='Se ha eliminado tu equipo Pokémon'
+            )
+        except:
+            pass
 reset_handler = CommandHandler('reset', reset_team)
 
 
