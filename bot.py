@@ -6,9 +6,6 @@ from matplotlib.colors import is_color_like
 import os
 import psycopg2
 
-conn = psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7")
-cursor = conn.cursor()
-
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -29,15 +26,16 @@ def create_user_db(user_id, username, full_name):
         full_name = 'NULL'
     
     with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+        conn.autocommit = True
         cursor = conn.cursor()
         try:
             cursor.execute('INSERT INTO poketeam (user_id, username, full_name) values (%s, %s, %s);', (user_id, username, full_name))
-            conn.commit()
         except:
             pass
 
 def update_columns(user_id, nickname=False, team=False, color=False, image=False): 
     with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+        conn.autocommit = True
         cursor = conn.cursor()
         if nickname:
             try:
@@ -59,7 +57,6 @@ def update_columns(user_id, nickname=False, team=False, color=False, image=False
                 cursor.execute('UPDATE poketeam SET image = %s WHERE user_id = %s;', (image, user_id))
             except:
                 pass
-        conn.commit()
         
 def get_value(user_id, nickname=False, team=False, color=False):
     with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
@@ -263,10 +260,10 @@ def reset_team(update, context):
     user_id = update.effective_chat.id
     
     with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+        conn.autocommit = True
         cursor = conn.cursor()
         try:
             cursor.execute('UPDATE poketeam SET team = NULL WHERE user_id = %s;', (user_id,))
-            conn.commit()
             context.bot.send_message(
                 chat_id=user_id,
                 text='Se ha eliminado tu equipo Pokémon'
