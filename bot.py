@@ -7,8 +7,7 @@ import os
 import psycopg2
 
 # Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
@@ -129,7 +128,7 @@ Comandos:  \n
 - */color* <color-code>: Definir color de fondo para la imagen. `/color blue` `/color #FF5733`  \n
 - */create*: Generar imagen.
 
-Para elegir un Pokémon shiny, agregar un \* al final del nombre. `/add mew\*`
+Para elegir un Pokémon shiny, agregar un \* al final del nombre. `/add mew*`
         """,
         parse_mode='markdown'
     )
