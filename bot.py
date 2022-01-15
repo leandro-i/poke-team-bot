@@ -179,7 +179,7 @@ def set_color(update, context):
         else:
             text = f'El color "{color}" es inválido'
     else:
-        text = 'No ha escrito ningún color. Ejemplos: ` blue #0000ff rgb(0,0,255) ` '
+        text = 'No ha escrito ningún color. Ejemplos: blue, #0000ff, rgb(0,0,255). '
         
     context.bot.send_message(
         chat_id=user_id,
