@@ -247,6 +247,14 @@ add_handler = CommandHandler('add', add)
 def delete(update, context):
     user_id = update.effective_chat.id
     del_pokemon = ' '.join(context.args).capitalize()
+    
+    if not del_pokemon:
+        context.bot.send_message(
+            chat_id=user_id,
+            text='No has escrito ningún Pokémon.'
+        )
+        return
+    
     team = get_value(user_id, team=True)
     
     if team:
