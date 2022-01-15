@@ -156,6 +156,12 @@ warning_handler = MessageHandler(Filters.text & (~Filters.command), warning)
 def name(update, context):
     user_id = update.effective_chat.id
     nickname = ' '.join(context.args)[:21]
+    if not nickname:
+        context.bot.send_message(
+            chat_id=user_id,
+            text='El campo del nombre estará vacío.'
+        )
+        return
     
     update_columns(user_id=user_id, nickname=nickname)
     
@@ -179,7 +185,7 @@ def set_color(update, context):
         else:
             text = f'El color "{color}" es inválido'
     else:
-        text = 'No ha escrito ningún color. Ejemplos: blue, #0000ff, rgb(0,0,255). '
+        text = 'No has escrito ningún color. Ejemplos: blue, #0000ff, rgb(0,0,255). '
         
     context.bot.send_message(
         chat_id=user_id,
