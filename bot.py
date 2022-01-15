@@ -171,13 +171,15 @@ def set_color(update, context):
     user_id = update.effective_chat.id
     color = ' '.join(context.args)
     
-    update_columns(user_id=user_id, color=color)
-    
-    if is_color_like(color):
-        update_columns(user_id=user_id, color=color)
-        text = f'Se ha cargado el color: {color}'
+    if color:
+        update_columns(user_id=user_id, color=color)    
+        if is_color_like(color):
+            update_columns(user_id=user_id, color=color)
+            text = f'Se ha cargado el color: {color}'
+        else:
+            text = f'El color "{color}" es inválido'
     else:
-        text = f'El color "{color}" es inválido'
+        text = 'No ha escrito ningún color. Ejemplos: `blue #0000ff rgb(0,0,255)`'
         
     context.bot.send_message(
         chat_id=user_id,
