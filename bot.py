@@ -192,6 +192,14 @@ color_handler = CommandHandler('color', set_color)
 def add(update, context):
     user_id = update.effective_chat.id
     new_pokemon = context.args
+    
+    if not new_pokemon:
+        context.bot.send_message(
+            chat_id=user_id,
+            text='No has escrito ningún Pokémon.'
+        )
+        return
+    
     team = get_value(user_id, team=True)
     
     if team:
