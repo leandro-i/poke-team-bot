@@ -2,7 +2,7 @@
 Bot de Telegram deployado en Heroku para generar una imagen de un equipo Pokémon.
 
 ## Bot en Telegram
-[Link](https://t.me/poke_team_bot)
+[https://t.me/poke_team_bot](https://t.me/poke_team_bot)
 
 ## Muestra de imagen
 ![Muestra de imagen](https://i.ibb.co/nRZNHVM/poketeam.jpg)
