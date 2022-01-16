@@ -31,3 +31,6 @@ Para elegir un Pokémon shiny, agregar un \* al final del nombre. `/add mew*`
 - [heroku/python](https://github.com/heroku/heroku-buildpack-python)
 - [heroku-community/apt](https://github.com/heroku/heroku-buildpack-apt)
 - [heroku/google-chrome](https://github.com/aurelmegn/heroku-buildpack-google-chrome)
+
+## Recursos
+[PokéAPI](https://pokeapi.co/)
