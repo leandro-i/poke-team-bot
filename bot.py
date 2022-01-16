@@ -264,7 +264,7 @@ def delete(update, context):
     team = get_value(user_id, team=True)
     
     if team:
-        team_list = team.split()
+        team_list = team.lower().split()
     else:
         team_list = []
     
