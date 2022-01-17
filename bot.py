@@ -163,7 +163,7 @@ def name(update, context):
     if not nickname:
         context.bot.send_message(
             chat_id=user_id,
-            text='El campo del nombre estará vacío.'
+            text='No has escrito ningún nombre.'
         )
         return
     
