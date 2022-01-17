@@ -4,8 +4,8 @@ Bot de Telegram deployado en Heroku para generar una imagen de un equipo Pokémo
 ## Bot en Telegram
 [https://t.me/poke_team_bot](https://t.me/poke_team_bot)
 
-## Muestra de imagen
-![Muestra de imagen](https://i.ibb.co/nRZNHVM/poketeam.jpg)
+## Imagen de muestra
+![Imagen de muestra](https://i.ibb.co/vZbY2Nv/photo1642461200.jpg)
 
 ## Comandos
 - */name* <user-name>: Definir nombre de usuario para la imagen.  
