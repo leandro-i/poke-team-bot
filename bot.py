@@ -13,6 +13,10 @@ logger = logging.getLogger(__name__)
 
 PORT = int(os.environ.get('PORT', '8443'))
 BOT_TOKEN = os.environ['BOT_TOKEN']
+HOST = os.environ['HOST']
+DATABASE = os.environ['DATABASE']
+USER = os.environ['USER']
+PASSWORD = os.environ['PASSWORD']
 
 def error(update, context):
     """Log Errors caused by Updates."""
@@ -24,7 +28,7 @@ def create_user_db(user_id, username, full_name):
     if not full_name:
         full_name = 'NULL'
     
-    with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+    with psycopg2.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD) as conn:
         conn.autocommit = True
         cursor = conn.cursor()
         try:
@@ -33,7 +37,7 @@ def create_user_db(user_id, username, full_name):
             pass
 
 def update_columns(user_id, nickname=False, team=False, color=False, image=False): 
-    with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+    with psycopg2.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD) as conn:
         conn.autocommit = True
         cursor = conn.cursor()
         if nickname:
@@ -58,7 +62,7 @@ def update_columns(user_id, nickname=False, team=False, color=False, image=False
                 pass
         
 def get_value(user_id, nickname=False, team=False, color=False):
-    with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+    with psycopg2.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD) as conn:
         cursor = conn.cursor()
         if nickname:
             try:
@@ -282,7 +286,7 @@ delete_handler = CommandHandler('delete', delete)
 def reset_team(update, context):
     user_id = update.effective_chat.id
     
-    with psycopg2.connect(host="ec2-34-233-214-228.compute-1.amazonaws.com", database="dfbilo9umh5shv", user="kdzjoosxpkwvbv", password="bf20b5ca37d0483a1879640bf55157f97f4237f1d4db50bfd59eb85eeccba1a7") as conn:
+    with psycopg2.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD) as conn:
         conn.autocommit = True
         cursor = conn.cursor()
         try:
