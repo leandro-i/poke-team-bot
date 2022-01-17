@@ -231,7 +231,7 @@ def add(update, context):
         else:
             shiny = False
         
-        r = requests.get(f'https://pokeapi.co/api/v2/pokemon/{p}')
+        r = requests.get(f'https://pokeapi.co/api/v2/pokemon/{p.lower()}')
         p = r.json()['name'].capitalize()
         if r.status_code == 200:
             if shiny == False:
