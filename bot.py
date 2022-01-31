@@ -321,6 +321,7 @@ def create(update, context):
     nickname = get_value(user_id, nickname=True)
     team = get_value(user_id, team=True)
     color = get_value(user_id, color=True)
+    sprites = get_value(user_id, sprites=True)
     
     if team:
         team_list = team.split()
@@ -351,7 +352,7 @@ def create(update, context):
             str_cards += f"""
             <div class="pokemon-card {type_1}">
                 <h3 class="name {('big' if len(pokemon['name']) == 10 else 'bigger') if len(pokemon['name']) > 9 else ''}">{pokemon['name']}</h3>
-                <img src="{pokemon['sprites']['front_default'] if shiny == False else pokemon['sprites']['front_shiny']}">
+                <img src="{(pokemon['sprites']['front_default'] if shiny == False else pokemon['sprites']['front_shiny']) if sprites else pokemon['official-artwork']['front_default']}">
                 <div class="cont">
                     <div class="typebar">
                         {div_types}
@@ -382,6 +383,7 @@ def create(update, context):
         update_columns(user_id, image=True)
         
 create_handler = CommandHandler('create', create)
+
 
 def sprites(update, context):
     user_id = update.effective_chat.id
