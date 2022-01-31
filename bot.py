@@ -352,7 +352,7 @@ def create(update, context):
             str_cards += f"""
             <div class="pokemon-card {type_1}">
                 <h3 class="name {('big' if len(pokemon['name']) == 10 else 'bigger') if len(pokemon['name']) > 9 else ''}">{pokemon['name']}</h3>
-                <img src="{(pokemon['home']['front_default'] if shiny == False else pokemon['home']['front_shiny']) if sprites else pokemon['official-artwork']['front_default']}">
+                <img src="{(pokemon['sprites']['other']['home']['front_default'] if shiny == False else pokemon['sprites']['other']['home']['front_shiny']) if sprites else pokemon['sprites']['other']['official-artwork']['front_default']}">
                 <div class="cont">
                     <div class="typebar">
                         {div_types}
