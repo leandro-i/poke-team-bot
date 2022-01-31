@@ -36,7 +36,7 @@ def create_user_db(user_id, username, full_name):
         except:
             pass
 
-def update_columns(user_id, nickname=False, team=False, color=False, image=False): 
+def update_columns(user_id, nickname=False, team=False, color=False, image=False, sprites=False): 
     with psycopg2.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD) as conn:
         conn.autocommit = True
         cursor = conn.cursor()
@@ -58,6 +58,16 @@ def update_columns(user_id, nickname=False, team=False, color=False, image=False
         if image:
             try:
                 cursor.execute('UPDATE poketeam SET image = %s WHERE user_id = %s;', (image, user_id))
+            except:
+                pass
+        if sprites:
+            try:
+                cursor.execute('SELECT sprites FROM poketeam WHERE user_id = %s;', (user_id,))
+                sprites_bool = cursor.fetchone()[0]
+                if sprites_bool:
+                    cursor.execute('UPDATE poketeam SET sprites = FALSE WHERE user_id = %s;', (user_id,))
+                else:
+                    cursor.execute('UPDATE poketeam SET sprites = TRUE WHERE user_id = %s;', (user_id,))
             except:
                 pass
         
