@@ -242,8 +242,8 @@ def add(update, context):
             shiny = False
         
         r = requests.get(f'https://pokeapi.co/api/v2/pokemon/{p.lower()}')
-        p = r.json()['name'].capitalize()
         if r.status_code == 200:
+            p = r.json()['name'].capitalize()
             if shiny == False:
                 team_list.append(p)
             else:
