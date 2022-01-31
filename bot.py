@@ -45,22 +45,22 @@ def update_columns(user_id, nickname=False, team=False, color=False, image=False
                 cursor.execute('UPDATE poketeam SET nickname = %s WHERE user_id = %s;', (nickname, user_id))
             except:
                 pass
-        if team:
+        elif team:
             try:
                 cursor.execute('UPDATE poketeam SET team = %s WHERE user_id = %s;', (team, user_id))
             except:
                 pass
-        if color:
+        elif color:
             try:
                 cursor.execute('UPDATE poketeam SET color = %s WHERE user_id = %s;', (color, user_id))
             except:
                 pass
-        if image:
+        elif image:
             try:
                 cursor.execute('UPDATE poketeam SET image = %s WHERE user_id = %s;', (image, user_id))
             except:
                 pass
-        if sprites:
+        elif sprites:
             try:                
                 sprites_bool = get_value(user_id, sprites=True)
                 if sprites_bool:
@@ -329,7 +329,6 @@ def create(update, context):
             chat_id=user_id,
             text='No has elegido tu equipo.'
         )
-        return
     
     if team_list:
         for p in team_list:
@@ -386,7 +385,21 @@ create_handler = CommandHandler('create', create)
 
 def sprites(update, context):
     user_id = update.effective_chat.id
-    update_columns(user_id, image=True)
+    update_columns(user_id, sprites=True)
+    
+    sprites_bool = get_value(user_id, sprites=True)
+    if sprites_bool:
+        text = 'Las imágenes de los Pokémon serán sprites.'
+    else:
+        text = """Las imágenes de los Pokémon serán *official artworks*.\n  
+No se verán los shinies."""
+        
+    context.bot.send_message(
+        chat_id=user_id,
+        text=text
+    )
+
+sprites_handler = CommandHandler('art', sprites)
 
     
 
@@ -403,6 +416,7 @@ if __name__ == '__main__':
     dispatcher.add_handler(reset_handler)
     dispatcher.add_handler(create_handler)
     dispatcher.add_handler(color_handler)
+    dispatcher.add_handler(sprites_handler)
     
     updater.start_webhook(listen="0.0.0.0",
                             port=PORT,
