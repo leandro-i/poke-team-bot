@@ -61,9 +61,8 @@ def update_columns(user_id, nickname=False, team=False, color=False, image=False
             except:
                 pass
         if sprites:
-            try:
-                cursor.execute('SELECT sprites FROM poketeam WHERE user_id = %s;', (user_id,))
-                sprites_bool = cursor.fetchone()[0]
+            try:                
+                sprites_bool = get_value(user_id, sprites=True)
                 if sprites_bool:
                     cursor.execute('UPDATE poketeam SET sprites = FALSE WHERE user_id = %s;', (user_id,))
                 else:
@@ -71,7 +70,7 @@ def update_columns(user_id, nickname=False, team=False, color=False, image=False
             except:
                 pass
         
-def get_value(user_id, nickname=False, team=False, color=False):
+def get_value(user_id, nickname=False, team=False, color=False, sprites=False):
     with psycopg2.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD) as conn:
         cursor = conn.cursor()
         if nickname:
@@ -81,16 +80,23 @@ def get_value(user_id, nickname=False, team=False, color=False):
                 return value
             except:
                 pass
-        if team:
+        elif team:
             try:
                 cursor.execute('SELECT team FROM poketeam WHERE user_id = %s;', (user_id,))
                 value = cursor.fetchone()[0]
                 return value
             except:
                 pass
-        if color:
+        elif color:
             try:
                 cursor.execute('SELECT color FROM poketeam WHERE user_id = %s;', (user_id,))
+                value = cursor.fetchone()[0]
+                return value
+            except:
+                pass
+        elif sprites:
+            try:
+                cursor.execute('SELECT sprites FROM poketeam WHERE user_id = %s;', (user_id,))
                 value = cursor.fetchone()[0]
                 return value
             except:
@@ -192,12 +198,11 @@ def set_color(update, context):
     color = ' '.join(context.args)
     
     if color:
-        update_columns(user_id=user_id, color=color)    
         if is_color_like(color):
             update_columns(user_id=user_id, color=color)
             text = f'Se ha cargado el color: {color}'
         else:
-            text = f'El color "{color}" es inválido'
+            text = f'El color "{color}" es inválido.'
     else:
         text = 'No has escrito ningún color. Ejemplos: blue, #0000ff, rgb(0,0,255). '
         
@@ -378,6 +383,10 @@ def create(update, context):
         update_columns(user_id, image=True)
         
 create_handler = CommandHandler('create', create)
+
+def sprites(update, context):
+    user_id = update.effective_chat.id
+    update_columns(user_id, image=True)
 
     
 
